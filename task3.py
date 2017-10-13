@@ -181,7 +181,7 @@ def run_3ab(k):
     min_index = np.argmin(classification_error)
     print(classification_error)
     weights = finished_weights[min_index]
-    plt.subplot(2, 1, 1)
+    plt.subplot(1, 2, 1)
     for i in range(data_input.shape[0]):
 
         if data_output[i] == 1:
@@ -190,7 +190,7 @@ def run_3ab(k):
             plt.scatter(data_input[i, 0], data_input[i, 1], color='r')
     plt.scatter(weights[:, 0], weights[:, 1], color='b')
 
-    plt.subplot(2, 1, 2)
+    plt.subplot(1, 2, 2)
     n_area_dots = 2000
     area_dots_y = np.random.uniform(-10, 15, [n_area_dots, 1])
     area_dots_x = np.random.uniform(-15, 25, [n_area_dots, 1])
@@ -226,6 +226,6 @@ def run_3ab(k):
 
 
 if __name__ == '__main__':
-    run_3ab(4)
-    #run_3ab(10)
+    #run_3ab(4)
+    run_3ab(10)
     #run_3c()
