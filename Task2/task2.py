@@ -13,6 +13,27 @@ def initialize_weights():
 def calculate_dw(network_output, eta, weights, selected_pattern):
     return eta*network_output*(selected_pattern-network_output*weights)
 
+def principal_component_analysis(input_data):
+    n_patterns = input_data.shape[0]
+    mean_data = np.mean(input_data,axis=0)
+    mean_x = mean_data[0]
+    mean_y = mean_data[1]
+
+    data_x = input_data[:, 0]
+    data_y = input_data[:, 1]
+
+    zero_mean_data = input_data - mean_data
+
+    covariance = np.cov(zero_mean_data.T)
+
+    values, vectors = np.linalg.eigh(covariance)
+    print(values, vectors[1,0], vectors[1,1])
+    max_index = np.argmax(values)
+    maximum_component_vector = vectors[max_index, :]
+    return maximum_component_vector
+        
+    
+
 
 def do_oja(input_data):
     n_output = input_data.shape[0]
@@ -38,6 +59,8 @@ if __name__ == '__main__':
     weights_task_b, weights_time_task_b = do_oja(input_data_mean_zero)
 
     # Plot if the network converges
+
+    principal_vector = principal_component_analysis(input_data)
     
     plt.figure(1)
     n_iterations = weights_time_task_b.shape[0]
@@ -54,13 +77,18 @@ if __name__ == '__main__':
     plt.scatter(input_data[:, 0], input_data[:, 1], color='r', alpha=0.4)
     #vector = np.zeros([2, 1])
     #vector.append(weights)
-    plt.quiver(0,0,weights_task_a[0], weights_task_a[1], scale_units='xy', scale=1)
+    plt.quiver(0,0,principal_vector[0], principal_vector[1], scale_units='xy', scale=1, color='black')
+    plt.quiver(0,0,weights_task_a[0], weights_task_a[1], scale_units='xy', scale=1, color='cyan')
+    plt.axis([-3, 13, -1, 3])
+  
 
     plt.subplot(2, 2, 4)
     plt.scatter(input_data_mean_zero[:, 0], input_data_mean_zero[:, 1], color='r', alpha=0.4)
     # vector = np.zeros([2, 1])
     # vector.append(weights)
-    plt.quiver(0, 0, weights_task_b[0], weights_task_b[1], scale_units='xy', scale=1)
+    plt.quiver(0,0,principal_vector[0], principal_vector[1], scale_units='xy', scale=1, color='black')
+    plt.quiver(0, 0, weights_task_b[0], weights_task_b[1], scale_units='xy', scale=1, color='cyan')
+
     plt.show()
    # plt.plot(weights_ordering[:, 0], weights_ordering[:, 1], color='b', marker='o')
 
